@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-// --- INSTRUCTIONS ---
-// 1. Create a folder named 'public' in your main project directory.
-// 2. Inside 'public', create a folder named 'images'.
-// 3. Put your photos there and name them 1.jpg, 2.jpg, 3.jpg, etc.
-// 4. If you add more, just add "/images/4.jpg" to the list below!
-
+// Using public Unsplash IDs for a cute, pastel aesthetic
 const IMAGES = [
-  "https://pin.it/1HZ6XGrJs",
-  "https://pin.it/72oWhbPjT",
-  "https://pin.it/79YBT2DgY",
-  // "/images/4.jpg", // Uncomment and add more lines if you have more photos!
+  "https://pin.it/1HZ6XGrJs", // Confetti/Party
+  "https://pin.it/72oWhbPjT", // Pink Balloons
+  "https://pin.it/79YBT2DgY", // Flowers
+  "https://pin.it/5EH0zq9v9", // Abstract Pastel
+  "https://pin.it/2nplWqOPP",
 ];
 
 const BackgroundGallery: React.FC = () => {
@@ -33,7 +29,7 @@ const BackgroundGallery: React.FC = () => {
 
       {IMAGES.map((src, i) => (
         <div
-          key={i}
+          key={src}
           className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out will-change-transform ${
             i === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
@@ -47,7 +43,7 @@ const BackgroundGallery: React.FC = () => {
             className={`w-full h-full bg-cover bg-center transition-transform duration-[10000ms] ease-linear ${
                i === index ? 'scale-110' : 'scale-100'
             }`}
-            style={{ backgroundImage: `url(${src})` }}
+            style={{ backgroundImage: `url("${src}")` }}
           />
         </div>
       ))}
