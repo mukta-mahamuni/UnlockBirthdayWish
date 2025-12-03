@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 // Using public Unsplash IDs for a cute, pastel aesthetic
 const IMAGES = [
-  "https://pin.it/1HZ6XGrJs", // Confetti/Party
-  "https://pin.it/72oWhbPjT", // Pink Balloons
-  "https://pin.it/79YBT2DgY", // Flowers
-  "https://pin.it/5EH0zq9v9", // Abstract Pastel
-  "https://pin.it/2nplWqOPP",
+  "https://i.pinimg.com/736x/2e/26/50/2e265026ddbb6405e0f11d779f2cb5c4.jpg", // Confetti/Party
+  "https://i.pinimg.com/736x/98/8f/3c/988f3ce9887fb7a0fa28e77dd96d82b2.jpg", // Pink Balloons
+  "https://i.pinimg.com/736x/67/75/8f/67758f85cc38da4e5c4316f35dd6670a.jpg", // Flowers
+  "https://i.pinimg.com/736x/b0/06/c6/b006c6d1d38018971700937918ef7dde.jpg", // Abstract Pastel
+  "https://i.pinimg.com/736x/f0/4b/03/f04b030837d5831c16155baf0537ff76.jpg",
 ];
 
 const BackgroundGallery: React.FC = () => {
