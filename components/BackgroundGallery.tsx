@@ -7,9 +7,9 @@ import React, { useState, useEffect } from 'react';
 // 4. If you add more, just add "/images/4.jpg" to the list below!
 
 const IMAGES = [
-  "/images/WhatsApp Image 2025-12-03 at 6.21.17 PM.jpeg",
-  "/images/WhatsApp Image 2025-12-03 at 6.23.22 PM.jpeg",
-  "/images/WhatsApp Image 2025-12-03 at 6.24.16 PM.jpeg",
+  "/images/image1.jpeg",
+  "/images/image2.jpeg",
+  "/images/image3.jpeg",
   // "/images/4.jpg", // Uncomment and add more lines if you have more photos!
 ];
 
