@@ -12,7 +12,7 @@ const IMAGES = [
   "https://drive.google.com/file/d/1IcbDNBO9yxXIJsCt_1abCq_ujcPq_sfD/view?usp=drive_link",
   "https://drive.google.com/file/d/1snINQAEjKt5EM_yYOoKO9vdfEiD1JUaw/view?usp=drive_link",
   "https://drive.google.com/file/d/1bpf2cDQ4FgFjubZlnFvu_BLDXHWH7GIE/view?usp=drive_link",
-  "https://drive.google.com/file/d/1deNpGDep7zQ9E5drpDDhMtXP2sVQqyS0/view?usp=drive_link"
+  "https://drive.google.com/file/d/1deNpGDep7zQ9E5drpDDhMtXP2sVQqyS0/view?usp=drive_link",
   // "https://drive.google.com/file/d/123456789YourIDHere/view?usp=sharing", <--- Paste like this
 ];
 
