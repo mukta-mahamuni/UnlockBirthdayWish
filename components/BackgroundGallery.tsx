@@ -7,9 +7,9 @@ import React, { useState, useEffect } from 'react';
 // 4. If you add more, just add "/images/4.jpg" to the list below!
 
 const IMAGES = [
-  "/images/image1.jpeg",
-  "/images/image2.jpeg",
-  "/images/image3.jpeg",
+  "/images/image1.jpg",
+  "/images/image2.jpg",
+  "/images/image3.jpg",
   // "/images/4.jpg", // Uncomment and add more lines if you have more photos!
 ];
 
