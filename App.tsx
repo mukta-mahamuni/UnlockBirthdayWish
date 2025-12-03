@@ -1,7 +1,11 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { GameState, EmojiItem } from './types';
 import BackgroundGallery from './components/BackgroundGallery';
 import Confetti from './components/Confetti';
+import BirthdayCake from './components/BirthdayCake';
+import GiftBox from './components/GiftBox';
+import MemoryGallery from './components/MemoryGallery';
 import { generateRiddle, generateBirthdayWish, verifyEmojiSelection } from './services/geminiService';
 
 // --- Icons ---
@@ -49,7 +53,7 @@ const ProgressBar = ({ stage }: { stage: number }) => {
 
 export default function App() {
   const [gameState, setGameState] = useState<GameState>(GameState.INTRO);
-  const [currentMission, setCurrentMission] = useState(0); // 0=Intro, 1=M1, 2=M2, 3=M3, 4=Unlock
+  const [currentMission, setCurrentMission] = useState(0); 
   
   // Mission 1 State
   const [riddle, setRiddle] = useState<{question: string, hint: string} | null>(null);
@@ -125,7 +129,6 @@ export default function App() {
   };
 
   const moveButton = () => {
-    // Random position within 200px
     const x = (Math.random() - 0.5) * 200;
     const y = (Math.random() - 0.5) * 200;
     setNoBtnPos({ x, y });
@@ -141,13 +144,38 @@ export default function App() {
     if (passwordInput.toUpperCase().trim() === 'SISTER') {
       const generatedWish = await generateBirthdayWish();
       setWish(generatedWish);
-      setGameState(GameState.REVEAL);
+      // START THE CEREMONY
+      setGameState(GameState.CAKE);
     } else {
       alert("Wrong password! Hint: What are you to me?");
     }
   };
 
   // --- Renders ---
+
+  // Special full-screen states for Cake and Gift
+  if (gameState === GameState.CAKE) {
+    return (
+      <div className="relative w-full h-[100dvh] font-sans overflow-hidden bg-black/60">
+        <BackgroundGallery />
+        <div className="relative z-10 w-full h-full flex items-center justify-center">
+          <BirthdayCake onComplete={() => setGameState(GameState.GIFT)} />
+        </div>
+      </div>
+    );
+  }
+
+  if (gameState === GameState.GIFT) {
+    return (
+      <div className="relative w-full h-[100dvh] font-sans overflow-hidden bg-black/60">
+        <BackgroundGallery />
+        <Confetti />
+        <div className="relative z-10 w-full h-full flex items-center justify-center">
+          <GiftBox onOpen={() => setGameState(GameState.REVEAL)} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-[100dvh] font-sans text-gray-800 overflow-hidden">
@@ -166,14 +194,14 @@ export default function App() {
         <div className="flex min-h-full flex-col items-center justify-center p-4 py-20">
           
           {/* Main Card */}
-          <div className="bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl p-8 max-w-md w-full border border-white/60 animate-float transition-all duration-500">
+          <div className="bg-white/80 backdrop-blur-md shadow-2xl rounded-3xl p-8 max-w-md w-full border border-white/60 animate-float transition-all duration-500">
             
             {/* INTRO */}
             {gameState === GameState.INTRO && (
               <div className="text-center space-y-6">
                 <h1 className="text-4xl font-handwriting text-purple-600 mb-2">Uh oh...</h1>
                 <p className="text-lg">You've been digitally kidnapped!</p>
-                <div className="bg-purple-100 p-4 rounded-xl text-purple-800 text-sm">
+                <div className="bg-purple-100/90 p-4 rounded-xl text-purple-800 text-sm">
                   <p>To unlock your birthday surprise, you must prove you are my true sister by passing 3 challenges.</p>
                 </div>
                 <button 
@@ -189,7 +217,7 @@ export default function App() {
             {gameState === GameState.MISSION_1 && (
               <div className="text-center space-y-6">
                 <h2 className="text-2xl font-bold text-pink-500">Mission 1: The Riddle</h2>
-                <div className="bg-yellow-50 p-6 rounded-xl border-2 border-yellow-100 border-dashed">
+                <div className="bg-yellow-50/90 p-6 rounded-xl border-2 border-yellow-100 border-dashed">
                   {riddleLoading ? (
                     <p className="animate-pulse">Consulting the oracle...</p>
                   ) : (
@@ -200,7 +228,7 @@ export default function App() {
                 <input 
                   type="text" 
                   placeholder="Type your answer..." 
-                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-300 outline-none text-center"
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-300 outline-none text-center bg-white/90"
                   value={riddleAnswer}
                   onChange={(e) => {
                     setRiddleAnswer(e.target.value);
@@ -208,7 +236,7 @@ export default function App() {
                   }}
                 />
                 
-                {riddleError && <p className="text-red-400 text-sm animate-bounce">{riddleError}</p>}
+                {riddleError && <p className="text-red-500 font-bold text-sm animate-bounce">{riddleError}</p>}
 
                 <button 
                   onClick={handleRiddleSubmit}
@@ -223,7 +251,7 @@ export default function App() {
             {gameState === GameState.MISSION_2 && (
               <div className="text-center space-y-4">
                 <h2 className="text-2xl font-bold text-purple-500">Mission 2: Describe Me</h2>
-                <p className="text-sm text-gray-600">Pick exactly 3 emojis that describe your favorite sibling.</p>
+                <p className="text-sm text-gray-700 font-medium">Pick exactly 3 emojis that describe your favorite sibling.</p>
                 
                 {!emojiFeedback ? (
                   <>
@@ -232,7 +260,7 @@ export default function App() {
                         <button 
                           key={item.id}
                           onClick={() => handleEmojiToggle(item.emoji)}
-                          className={`text-3xl p-2 rounded-lg transition-all ${selectedEmojis.includes(item.emoji) ? 'bg-purple-200 scale-110 ring-2 ring-purple-400' : 'bg-gray-50 hover:bg-gray-100'}`}
+                          className={`text-3xl p-2 rounded-lg transition-all ${selectedEmojis.includes(item.emoji) ? 'bg-purple-200 scale-110 ring-2 ring-purple-400' : 'bg-gray-50/80 hover:bg-gray-100'}`}
                         >
                           {item.emoji}
                         </button>
@@ -248,10 +276,10 @@ export default function App() {
                     </button>
                   </>
                 ) : (
-                  <div className="bg-purple-50 p-6 rounded-xl animate-in fade-in zoom-in duration-500">
+                  <div className="bg-purple-50/90 p-6 rounded-xl animate-in fade-in zoom-in duration-500">
                     <p className="text-xl mb-2">{selectedEmojis.join(' ')}</p>
                     <p className="font-handwriting text-lg text-purple-800">"{emojiFeedback}"</p>
-                    <p className="text-xs text-gray-400 mt-4">(Moving to next level...)</p>
+                    <p className="text-xs text-gray-500 mt-4">(Moving to next level...)</p>
                   </div>
                 )}
               </div>
@@ -260,7 +288,7 @@ export default function App() {
             {/* MISSION 3: RIGGED QUIZ */}
             {gameState === GameState.MISSION_3 && (
               <div className="text-center space-y-8">
-                 <h2 className="text-2xl font-bold text-blue-400">Mission 3: The Truth</h2>
+                 <h2 className="text-2xl font-bold text-blue-500">Mission 3: The Truth</h2>
                  <p className="text-xl font-medium">Who is the favorite child?</p>
                  
                  <div className="relative h-40 w-full flex items-center justify-center select-none">
@@ -288,7 +316,7 @@ export default function App() {
                  </div>
                  
                  {quizAttempt > 2 && (
-                   <p className="text-sm text-gray-400 italic">Stop trying to click "Me". It's physically impossible.</p>
+                   <p className="text-sm text-gray-600 font-bold italic">Stop trying to click "Me". It's physically impossible.</p>
                  )}
               </div>
             )}
@@ -307,7 +335,7 @@ export default function App() {
                 <input 
                   type="password" 
                   placeholder="Enter Password" 
-                  className="w-full p-4 rounded-lg border-2 border-pink-200 focus:border-pink-400 outline-none text-center text-xl tracking-widest"
+                  className="w-full p-4 rounded-lg border-2 border-pink-200 focus:border-pink-400 outline-none text-center text-xl tracking-widest bg-white/90"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                 />
@@ -334,20 +362,26 @@ export default function App() {
                   Happy Birthday!
                 </h1>
                 
-                <div className="bg-white/50 p-6 rounded-2xl shadow-inner max-h-60 overflow-y-auto custom-scrollbar">
-                  <p className="text-lg leading-loose italic text-gray-700 whitespace-pre-line">
+                <div className="bg-white/70 p-6 rounded-2xl shadow-inner max-h-60 overflow-y-auto custom-scrollbar">
+                  <p className="text-lg leading-loose italic text-gray-800 whitespace-pre-line font-medium">
                     {wish || "Loading your poem..."}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 uppercase tracking-widest mb-2">Gift Coupon</p>
-                  <div className="bg-gradient-to-r from-pink-100 to-blue-100 p-4 rounded-lg border border-dashed border-gray-400">
-                     <p className="font-bold text-gray-700">Redeem for: 1 Free Lunch & 30 mins of no annoying jokes.</p>
+                {/* MEMORY GALLERY */}
+                <div className="text-left mt-4">
+                  <p className="text-sm font-bold text-gray-600 ml-1">📸 Our Memories:</p>
+                  <MemoryGallery />
+                </div>
+
+                <div className="pt-4 border-t border-gray-200 mt-4">
+                  <p className="text-sm text-gray-600 uppercase tracking-widest mb-2">Gift Coupon</p>
+                  <div className="bg-gradient-to-r from-pink-100/90 to-blue-100/90 p-4 rounded-lg border border-dashed border-gray-400">
+                     <p className="font-bold text-gray-800">Redeem for: 1 Free Lunch & 30 mins of no annoying jokes.</p>
                   </div>
                 </div>
                 
-                <p className="text-xs text-gray-400 mt-4">Love you! ❤️</p>
+                <p className="text-xs text-gray-500 mt-4">Love you! ❤️</p>
               </div>
             )}
           </div>
