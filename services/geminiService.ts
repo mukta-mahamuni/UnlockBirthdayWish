@@ -1,10 +1,21 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// The vite.config.ts file ensures process.env.API_KEY is populated during the build
+const apiKey = process.env.API_KEY;
 
+// Fallback logic in case the key is missing (prevents app crash)
+const ai = new GoogleGenAI({ apiKey: apiKey || "dummy-key" });
 const modelId = "gemini-2.5-flash";
 
 export const generateRiddle = async (): Promise<{ riddle: string; hint: string }> => {
+  if (!apiKey) {
+    console.warn("API Key is missing. Using fallback content.");
+    return { 
+      riddle: "I have icing but no snow. I have candles but no light bulb. What am I?", 
+      hint: "Yummy!" 
+    };
+  }
+
   try {
     const response = await ai.models.generateContent({
       model: modelId,
@@ -38,6 +49,8 @@ export const generateRiddle = async (): Promise<{ riddle: string; hint: string }
 };
 
 export const generateBirthdayWish = async (sisterName: string = "Sis"): Promise<string> => {
+  if (!apiKey) return "Happy Birthday! You are the best sister anyone could ask for. (API Key missing, but my love is real!)";
+
   try {
     const response = await ai.models.generateContent({
       model: modelId,
@@ -50,6 +63,8 @@ export const generateBirthdayWish = async (sisterName: string = "Sis"): Promise<
 };
 
 export const verifyEmojiSelection = async (emojis: string[]): Promise<string> => {
+   if (!apiKey) return "Wow, really? That's how you see me? Okay, fair enough.";
+
    try {
     const response = await ai.models.generateContent({
       model: modelId,
