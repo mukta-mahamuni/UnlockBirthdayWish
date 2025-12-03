@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 // Using high-quality memory-style images. 
 // Replace these URLs with actual photos of you and your sister for the best effect!
 const IMAGES = [
-  "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1920&auto=format&fit=crop", // Happy sisters/friends
+  "https://drive.google.com/file/d/1IcbDNBO9yxXIJsCt_1abCq_ujcPq_sfD/view?usp=drive_link", // Happy sisters/friends
   "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1920&auto=format&fit=crop", // Party/Fun
   "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&auto=format&fit=crop", // Celebration/Confetti
-  "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?q=80&w=1920&auto=format&fit=crop", // Success/Joy
-  "https://images.unsplash.com/photo-1530103862676-de3c9da59af7?q=80&w=1920&auto=format&fit=crop", // Travel/Memories
+  "https://drive.google.com/file/d/1deNpGDep7zQ9E5drpDDhMtXP2sVQqyS0/view?usp=drive_link", // Success/Joy
+  "https://drive.google.com/file/d/1snINQAEjKt5EM_yYOoKO9vdfEiD1JUaw/view?usp=drive_link", // Travel/Memories
 ];
 
 const BackgroundGallery: React.FC = () => {
