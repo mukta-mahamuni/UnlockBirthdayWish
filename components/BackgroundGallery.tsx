@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 const IMAGES = [
   "/images/WhatsApp Image 2025-12-03 at 6.21.17 PM.jpeg",
   "/images/WhatsApp Image 2025-12-03 at 6.23.22 PM.jpeg",
-  "/images/3.jpg",
+  "/images/WhatsApp Image 2025-12-03 at 6.24.16 PM.jpeg",
   // "/images/4.jpg", // Uncomment and add more lines if you have more photos!
 ];
 
