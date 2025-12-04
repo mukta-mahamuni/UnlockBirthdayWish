@@ -289,7 +289,7 @@ export default function App() {
                 </div>
                 
                 <h1 className="text-5xl font-handwriting text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 pb-2 text-center">
-                  Happy Birthday!
+                  Happy Birthday! May all your wishes come true.
                 </h1>
                 
                 <div className="bg-white/60 p-6 rounded-2xl shadow-inner max-h-60 overflow-y-auto custom-scrollbar mt-4">
@@ -306,11 +306,34 @@ export default function App() {
                 <div className="pt-4 border-t border-gray-200 mt-6">
                   <p className="text-sm text-gray-600 uppercase tracking-widest mb-2 text-center">Gift Coupon</p>
                   <div className="bg-gradient-to-r from-pink-100/90 to-blue-100/90 p-4 rounded-lg border border-dashed border-gray-400 text-center">
-                     <p className="font-bold text-gray-800">Redeem for: 1 Free Lunch & 30 mins of no annoying jokes.</p>
+                     <p className="font-bold text-gray-800">Redeem for: What? Another gift? 😳 I literally just gave you one… now it’s your turn. Return gift time → give me a treat 😌🍽️✨</p>
                   </div>
                 </div>
                 
                 <p className="text-xs text-gray-500 mt-4 text-center">Love you! ❤️</p>
+             </div>
+
+             {/* --- CREATOR FOOTER --- */}
+             <div className="mt-12 flex flex-col items-center justify-center text-center space-y-3 pb-12 animate-in slide-in-from-bottom-8 duration-1000 delay-500">
+                <p className="text-white font-handwriting text-xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] tracking-wide opacity-90">
+                  Designed & crafted with love <br/> 
+                  <span className="text-sm font-sans font-bold uppercase tracking-widest opacity-80">by Mukta</span>
+                </p>
+                <div className="w-16 h-16 rounded-full border-2 border-white/80 shadow-lg overflow-hidden bg-white/30 backdrop-blur-sm transform hover:scale-110 transition-transform duration-300">
+                   {/* UPLOAD 'me.jpg' to public/images folder */}
+                   <img 
+                     src="/images/me.jpg" 
+                     onError={(e) => {
+                       // Fallback if image not found to avoid broken icon
+                       e.currentTarget.style.display = 'none';
+                       e.currentTarget.parentElement!.style.backgroundColor = 'rgba(255,255,255,0.2)';
+                       e.currentTarget.parentElement!.innerText = '👩';
+                       e.currentTarget.parentElement!.className += ' flex items-center justify-center text-2xl';
+                     }} 
+                     alt="Mukta" 
+                     className="w-full h-full object-cover" 
+                   />
+                </div>
              </div>
            </div>
         </div>
