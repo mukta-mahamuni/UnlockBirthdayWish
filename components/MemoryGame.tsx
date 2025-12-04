@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 
 // --- INSTRUCTIONS ---
-// 1. Create a folder named 'public' in your main project folder (next to src, package.json).
+// 1. Create a folder named 'public' in your main project folder.
 // 2. Inside 'public', create a folder named 'images'.
-// 3. Put your photos there and rename them to game1.jpg, game2.jpg, etc.
-// 4. Then these links below will work automatically!
+// 3. Put your FULL, UNCROPPED photos there (e.g. game1.jpg).
+//    The code below automatically splits them into Left/Right halves!
+// 4. Rename your files to match the list below:
 
 const MEMORY_PHOTOS = [
   "/images/game1.jpg", 
