@@ -49,6 +49,23 @@ const SONG_URL = "/audio/audio1.mp3";
 // If you haven't uploaded a file yet, you can uncomment this Wikimedia link to test:
 // const SONG_URL = "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Happy_Birthday_to_You_Piano.ogg/Happy_Birthday_to_You_Piano.ogg.mp3";
 
+
+// --- 📝 EDIT YOUR CUSTOM QUESTIONS HERE 📝 ---
+
+const CUSTOM_RIDDLE_1 = {
+  question: "I have candles but no light bulb. I have icing but no snow. What am I?", // <--- Question 1
+  hint: "You eat me on your birthday!",
+  validAnswers: ['cake', 'birthday cake', 'cupcake'] // <--- Acceptable answers (lowercase)
+};
+
+const CUSTOM_RIDDLE_2 = {
+  question: "Which indoor game we used to play a lot during our summer vacation", // <--- Question 2
+  hint: "I used to be a champion at it😎",
+  validAnswers: ['carrom', 'Carrom']
+};
+
+// ------------------------------------------------
+
 // --- Components ---
 
 const ProgressBar = ({ stage }: { stage: number }) => {
@@ -331,11 +348,7 @@ export default function App() {
                   {/* Riddle Part 1 */}
                   <div className={`transition-all duration-500 ${mission1Stage > 0 ? 'opacity-50 pointer-events-none' : ''}`}>
                     <div className="bg-yellow-50/90 p-6 rounded-xl border-2 border-yellow-100 border-dashed mb-4">
-                      {riddleLoading ? (
-                        <p className="animate-pulse">Consulting the oracle...</p>
-                      ) : (
-                        <p className="text-lg font-handwriting leading-relaxed">{riddle?.question}</p>
-                      )}
+                      <p className="text-lg font-handwriting leading-relaxed">{CUSTOM_RIDDLE_1.question}</p>
                     </div>
                     
                     <div className="flex gap-2">
@@ -366,7 +379,7 @@ export default function App() {
                     <div className="animate-in slide-in-from-bottom-4 fade-in duration-500 border-t-2 border-dashed border-gray-200 pt-6">
                         <div className="bg-purple-50/90 p-6 rounded-xl border-2 border-purple-100 border-dashed mb-4">
                             <p className="text-lg font-handwriting leading-relaxed">
-                                "What goes up but never comes down?"
+                                {CUSTOM_RIDDLE_2.question}
                             </p>
                         </div>
                         <div className="flex gap-2">
