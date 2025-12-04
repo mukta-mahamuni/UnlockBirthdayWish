@@ -8,7 +8,11 @@ import React from 'react';
 
 const MEMORIES = [
   {
-    src: "/images/gallery1.jpeg",
+    src: "/images/image10.jpeg",
+    caption: "Unfiltered Happiness"
+  },
+  {
+    src: "/images/image11.jpeg",
     caption: "Remember this?"
   },
   {
