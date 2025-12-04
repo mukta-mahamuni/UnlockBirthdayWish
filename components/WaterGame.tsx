@@ -42,12 +42,13 @@ const WaterGame: React.FC<WaterGameProps> = ({ onComplete }) => {
 
   return (
     <div className="w-full max-w-md mx-auto p-4 text-center animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <h2 className="text-2xl font-bold text-blue-500 mb-2">Mission 3: Hydration Check</h2>
+      <h2 className="text-2xl font-bold text-blue-500 mb-2">Mission 3: Operation: Bring Water</h2>
       
       <div className="bg-blue-50/90 p-6 rounded-2xl border-2 border-blue-100 shadow-sm mb-6 backdrop-blur-sm relative overflow-hidden">
         <p className="text-gray-700 mb-6 font-medium leading-relaxed relative z-10">
           Your sibling is tired from making this whole game for you... <br/>
-          Bring a little water to recharge them. 💧💗
+          Bring a little water to recharge them. Also, fun fact: in real life you NEVER bring me water when I ask 😭💧
+So today… you have no escape 😂
         </p>
 
         {/* --- ANIMATED GLASS VISUAL --- */}
