@@ -319,7 +319,7 @@ export default function App() {
                   Designed & crafted with love <br/> 
                   <span className="text-sm font-sans font-bold uppercase tracking-widest opacity-80">by Mukta</span>
                 </p>
-                <div className="w-16 h-16 rounded-full border-2 border-white/80 shadow-lg overflow-hidden bg-white/30 backdrop-blur-sm transform hover:scale-110 transition-transform duration-300">
+                <div className="w-28 h-28 rounded-full border-2 border-white/80 shadow-lg overflow-hidden bg-white/30 backdrop-blur-sm transform hover:scale-110 transition-transform duration-300">
                    {/* UPLOAD 'me.jpg' to public/images folder */}
                    <img 
                      src="/images/image9.jpeg" 
