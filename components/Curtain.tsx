@@ -77,7 +77,7 @@ const Curtain: React.FC<CurtainProps> = ({ onOpen }) => {
        {!isOpen && (
          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
            <div className="bg-black/60 backdrop-blur-sm text-yellow-100 px-10 py-6 rounded-full border-2 border-yellow-500/50 font-handwriting text-3xl sm:text-4xl animate-pulse shadow-[0_0_30px_rgba(255,215,0,0.3)] tracking-wider">
-             Tap to Start the Show!
+             Tap to Reveal the Magic 🌟
            </div>
          </div>
        )}
