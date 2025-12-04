@@ -5,8 +5,10 @@ export enum GameState {
   MISSION_2 = 'MISSION_2', // Emojis
   MISSION_3 = 'MISSION_3', // Quiz
   UNLOCK = 'UNLOCK',       // Final Password
-  CAKE = 'CAKE',           // New: Blow candle & cut cake
-  GIFT = 'GIFT',           // New: Open gift box
+  CURTAIN = 'CURTAIN',     // New: Theater curtain
+  PARTY = 'PARTY',         // New: Cartoons & Fireworks
+  CAKE = 'CAKE',           // Blow candle & cut cake
+  GIFT = 'GIFT',           // Open gift box
   REVEAL = 'REVEAL',       // Birthday Wish & Gallery
 }
 
