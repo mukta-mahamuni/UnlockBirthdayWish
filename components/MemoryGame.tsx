@@ -132,8 +132,9 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ onComplete }) => {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-2 sm:p-4 animate-in fade-in duration-700">
-      <h2 className="text-2xl font-bold text-purple-500 text-center mb-2">Mission 2: Complete the Memory</h2>
-      <p className="text-sm text-gray-600 text-center mb-4">Find the two halves of our photos to complete the memory!</p>
+      <h2 className="text-2xl font-bold text-purple-500 text-center mb-2">Mission 2: Memory Mosaic</h2>
+      <p className="text-sm text-gray-600 text-center mb-4">Let’s see how well you remember our little moments.
+Find the two halves of our photos and bring each memory back together!💗📸</p>
       
       {/* 
         GRID UPDATE:
