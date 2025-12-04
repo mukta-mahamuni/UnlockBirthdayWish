@@ -322,7 +322,7 @@ export default function App() {
                 <div className="w-16 h-16 rounded-full border-2 border-white/80 shadow-lg overflow-hidden bg-white/30 backdrop-blur-sm transform hover:scale-110 transition-transform duration-300">
                    {/* UPLOAD 'me.jpg' to public/images folder */}
                    <img 
-                     src="/images/me.jpg" 
+                     src="/images/image9.jpeg" 
                      onError={(e) => {
                        // Fallback if image not found to avoid broken icon
                        e.currentTarget.style.display = 'none';
