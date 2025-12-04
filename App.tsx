@@ -53,14 +53,14 @@ const SONG_URL = "/audio/audio1.mp3";
 // --- 📝 EDIT YOUR CUSTOM QUESTIONS HERE 📝 ---
 
 const CUSTOM_RIDDLE_1 = {
-  question: "I have candles but no light bulb. I have icing but no snow. What am I?", // <--- Question 1
-  hint: "You eat me on your birthday!",
-  validAnswers: ['cake', 'birthday cake', 'cupcake'] // <--- Acceptable answers (lowercase)
+  question: "Name the childhood song that made your little heart happy 🤍🎵", // <--- Question 1
+  hint: "You should remember it… right? 😌🎶",
+  validAnswers: ['O Piya', 'o piya', 'O piya'] // <--- Acceptable answers (lowercase)
 };
 
 const CUSTOM_RIDDLE_2 = {
-  question: "Which indoor game we used to play a lot during our summer vacation ?", // <--- Question 2
-  hint: "I used to be a champion at it😎",
+  question: "Which indoor game we used to play a lot during our summer vacation ? (I used to be a champion at it😎)", // <--- Question 2
+  hint: "No more hints for this question :(",
   validAnswers: ['carrom', 'Carrom']
 };
 
