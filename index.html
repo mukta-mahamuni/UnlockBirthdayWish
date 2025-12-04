@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -26,6 +27,10 @@
             animation: {
               'float': 'float 6s ease-in-out infinite',
               'wiggle': 'wiggle 1s ease-in-out infinite',
+              'dance': 'bounce 1s infinite',
+              'twinkle': 'twinkle 2s ease-in-out infinite alternate',
+              'pop': 'pop 2s ease-out infinite',
+              'sway': 'sway 3s ease-in-out infinite',
             },
             keyframes: {
               float: {
@@ -35,6 +40,19 @@
               wiggle: {
                 '0%, 100%': { transform: 'rotate(-3deg)' },
                 '50%': { transform: 'rotate(3deg)' },
+              },
+              twinkle: {
+                '0%': { opacity: '0.4', transform: 'scale(0.8)' },
+                '100%': { opacity: '1', transform: 'scale(1.2)' },
+              },
+              pop: {
+                '0%': { transform: 'scale(0)', opacity: '0' },
+                '50%': { opacity: '0.8' },
+                '100%': { transform: 'scale(1.5)', opacity: '0' },
+              },
+              sway: {
+                '0%, 100%': { transform: 'rotate(-5deg)' },
+                '50%': { transform: 'rotate(5deg)' },
               }
             }
           },
@@ -47,16 +65,28 @@
         overflow: hidden; /* Prevent scroll on background */
         background-color: #000;
       }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 192, 203, 0.5);
+        border-radius: 10px;
+      }
     </style>
   <script type="importmap">
 {
   "imports": {
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
     "vite": "https://aistudiocdn.com/vite@^7.2.6",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/"
   }
 }
 </script>
