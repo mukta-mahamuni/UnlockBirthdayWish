@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GameState, EmojiItem } from './types';
+import { GameState } from './types';
 import BackgroundGallery from './components/BackgroundGallery';
 import Confetti from './components/Confetti';
 import BirthdayCake from './components/BirthdayCake';
@@ -8,11 +8,14 @@ import GiftBox from './components/GiftBox';
 import MemoryGallery from './components/MemoryGallery';
 import Curtain from './components/Curtain';
 import PartyScene from './components/PartyScene';
-import { generateRiddle, generateBirthdayWish, verifyEmojiSelection } from './services/geminiService';
+import MemoryGame from './components/MemoryGame';
+import WaterGame from './components/WaterGame';
+import EmojiGame from './components/EmojiGame';
+import { generateRiddle, generateBirthdayWish } from './services/geminiService';
 
 // --- Icons ---
 const LockIcon = ({ unlocked }: { unlocked: boolean }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={`h-8 w-8 ${unlocked ? 'text-green-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 sm:h-8 sm:w-8 ${unlocked ? 'text-green-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     {unlocked ? (
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
     ) : (
@@ -37,27 +40,22 @@ const MusicIcon = ({ playing }: { playing: boolean }) => (
   </svg>
 );
 
-// --- Constants ---
-const EMOJIS: EmojiItem[] = [
-  { id: '1', emoji: '👑', label: 'Bossy' },
-  { id: '2', emoji: '🤡', label: 'Clown' },
-  { id: '3', emoji: '🥰', label: 'Sweet' },
-  { id: '4', emoji: '👹', label: 'Monster' },
-  { id: '5', emoji: '🤓', label: 'Nerd' },
-  { id: '6', emoji: '🦄', label: 'Unique' },
-  { id: '7', emoji: '💤', label: 'Sleepy' },
-  { id: '8', emoji: '🍕', label: 'Hungry' },
-];
+// --- AUDIO SETUP INSTRUCTIONS ---
+// 1. Create a folder named 'audio' inside your 'public' folder.
+// 2. Put your MP3 file there and name it 'song.mp3'.
+// 3. This URL works because Vercel serves the 'public' folder at the root.
+const SONG_URL = "/audio/song.mp3"; 
 
-const SONG_URL = "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Happy_Birthday_to_You_Piano.ogg/Happy_Birthday_to_You_Piano.ogg.mp3";
+// If you haven't uploaded a file yet, you can uncomment this Wikimedia link to test:
+// const SONG_URL = "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Happy_Birthday_to_You_Piano.ogg/Happy_Birthday_to_You_Piano.ogg.mp3";
 
 // --- Components ---
 
 const ProgressBar = ({ stage }: { stage: number }) => {
   return (
-    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center gap-4 pointer-events-none">
-      {[1, 2, 3].map((num) => (
-        <div key={num} className={`w-12 h-12 rounded-full flex items-center justify-center border-4 shadow-lg transition-colors duration-500 ${stage > num ? 'bg-green-100 border-green-400' : stage === num ? 'bg-white border-pink-400 scale-110' : 'bg-white/80 border-gray-300'}`}>
+    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center gap-2 sm:gap-4 pointer-events-none px-4">
+      {[1, 2, 3, 4, 5].map((num) => (
+        <div key={num} className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-4 shadow-lg transition-colors duration-500 ${stage > num ? 'bg-green-100 border-green-400' : stage === num ? 'bg-white border-pink-400 scale-110' : 'bg-white/80 border-gray-300'}`}>
           <LockIcon unlocked={stage > num} />
         </div>
       ))}
@@ -76,18 +74,15 @@ export default function App() {
   // Curtain State
   const [isCurtainOpening, setIsCurtainOpening] = useState(false);
 
-  // Mission 1 State
+  // Mission 1 State (Riddle)
+  const [mission1Stage, setMission1Stage] = useState(0); // 0: AI Riddle, 1: Static Riddle
   const [riddle, setRiddle] = useState<{question: string, hint: string} | null>(null);
   const [riddleAnswer, setRiddleAnswer] = useState("");
+  const [riddle2Answer, setRiddle2Answer] = useState("");
   const [riddleLoading, setRiddleLoading] = useState(false);
   const [riddleError, setRiddleError] = useState("");
 
-  // Mission 2 State
-  const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
-  const [emojiFeedback, setEmojiFeedback] = useState("");
-  const [emojiLoading, setEmojiLoading] = useState(false);
-
-  // Mission 3 State
+  // Mission 5 State (Quiz)
   const [quizAttempt, setQuizAttempt] = useState(0);
   const moveButtonRef = useRef<HTMLButtonElement>(null);
   const [noBtnPos, setNoBtnPos] = useState({ x: 0, y: 0 });
@@ -119,33 +114,35 @@ export default function App() {
   const handleRiddleSubmit = () => {
     const validAnswers = ['cake', 'sister', 'birthday', 'sibling', 'love', 'gift', 'candle', 'party', 'me'];
     if (validAnswers.some(ans => riddleAnswer.toLowerCase().includes(ans))) {
-      setGameState(GameState.MISSION_2);
-      setCurrentMission(2);
+      setMission1Stage(1); // Move to Riddle 2
+      setRiddleError('');
     } else {
       setRiddleError(`Nope! Here's a hint: ${riddle?.hint}`);
     }
   };
 
-  const handleEmojiToggle = (emoji: string) => {
-    if (selectedEmojis.includes(emoji)) {
-      setSelectedEmojis(prev => prev.filter(e => e !== emoji));
+  const handleRiddle2Submit = () => {
+    if (riddle2Answer.toLowerCase().includes('age')) {
+       setGameState(GameState.MISSION_2);
+       setCurrentMission(2);
     } else {
-      if (selectedEmojis.length < 3) {
-        setSelectedEmojis(prev => [...prev, emoji]);
-      }
+       setRiddleError("Hint: It happens every birthday!");
     }
   };
 
-  const handleEmojiSubmit = async () => {
-    setEmojiLoading(true);
-    const feedback = await verifyEmojiSelection(selectedEmojis);
-    setEmojiFeedback(feedback);
-    setEmojiLoading(false);
-    
-    setTimeout(() => {
-      setGameState(GameState.MISSION_3);
-      setCurrentMission(3);
-    }, 3000);
+  const handleMemoryGameComplete = () => {
+    setGameState(GameState.MISSION_3);
+    setCurrentMission(3);
+  };
+
+  const handleWaterGameComplete = () => {
+    setGameState(GameState.MISSION_4);
+    setCurrentMission(4);
+  };
+
+  const handleEmojiGameComplete = () => {
+    setGameState(GameState.MISSION_5);
+    setCurrentMission(5);
   };
 
   const moveButton = () => {
@@ -157,7 +154,7 @@ export default function App() {
 
   const handleQuizSuccess = () => {
     setGameState(GameState.UNLOCK);
-    setCurrentMission(4);
+    setCurrentMission(6); // All missions complete
   };
 
   const handleUnlock = async () => {
@@ -223,7 +220,7 @@ export default function App() {
         ref={audioRef} 
         src={SONG_URL} 
         loop 
-        onError={() => console.log("Audio load failed")} 
+        onError={(e) => console.log("Audio load failed (Make sure song.mp3 is in public/audio/ folder)")} 
       />
       
       {/* Music Toggle - Visible during the party sequence */}
@@ -301,13 +298,13 @@ export default function App() {
       {!isPartyMode && (
         <div className="relative z-10 w-full h-full overflow-y-auto overflow-x-hidden">
           
-          {(gameState === GameState.MISSION_1 || gameState === GameState.MISSION_2 || gameState === GameState.MISSION_3) && (
+          {(gameState === GameState.MISSION_1 || gameState === GameState.MISSION_2 || gameState === GameState.MISSION_3 || gameState === GameState.MISSION_4 || gameState === GameState.MISSION_5) && (
             <ProgressBar stage={currentMission} />
           )}
 
           <div className="flex min-h-full flex-col items-center justify-center p-4 py-20">
             
-            <div className="bg-white/85 backdrop-blur-md shadow-2xl rounded-3xl p-8 max-w-md w-full border border-white/60 animate-float transition-all duration-500">
+            <div className={`bg-white/85 backdrop-blur-md shadow-2xl rounded-3xl w-full border border-white/60 animate-float transition-all duration-500 ${gameState === GameState.MISSION_2 ? 'max-w-4xl p-4 sm:p-8' : 'max-w-md p-8'}`}>
               
               {/* INTRO */}
               {gameState === GameState.INTRO && (
@@ -315,7 +312,7 @@ export default function App() {
                   <h1 className="text-4xl font-handwriting text-purple-600 mb-2">Uh oh...</h1>
                   <p className="text-lg">You've been digitally kidnapped!</p>
                   <div className="bg-purple-100/90 p-4 rounded-xl text-purple-800 text-sm">
-                    <p>To unlock your birthday surprise, you must prove you are my true sister by passing 3 challenges.</p>
+                    <p>To unlock your birthday surprise, you must prove you are my true sister by passing 5 challenges.</p>
                   </div>
                   <button 
                     onClick={handleStartGame}
@@ -329,80 +326,100 @@ export default function App() {
               {/* MISSION 1: RIDDLE */}
               {gameState === GameState.MISSION_1 && (
                 <div className="text-center space-y-6">
-                  <h2 className="text-2xl font-bold text-pink-500">Mission 1: The Riddle</h2>
-                  <div className="bg-yellow-50/90 p-6 rounded-xl border-2 border-yellow-100 border-dashed">
-                    {riddleLoading ? (
-                      <p className="animate-pulse">Consulting the oracle...</p>
-                    ) : (
-                      <p className="text-lg font-handwriting leading-relaxed">{riddle?.question}</p>
-                    )}
+                  <h2 className="text-2xl font-bold text-pink-500">Mission 1: The Riddles</h2>
+                  
+                  {/* Riddle Part 1 */}
+                  <div className={`transition-all duration-500 ${mission1Stage > 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <div className="bg-yellow-50/90 p-6 rounded-xl border-2 border-yellow-100 border-dashed mb-4">
+                      {riddleLoading ? (
+                        <p className="animate-pulse">Consulting the oracle...</p>
+                      ) : (
+                        <p className="text-lg font-handwriting leading-relaxed">{riddle?.question}</p>
+                      )}
+                    </div>
+                    
+                    <div className="flex gap-2">
+                        <input 
+                            type="text" 
+                            placeholder="Answer 1..." 
+                            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-300 outline-none text-center bg-white/90"
+                            value={riddleAnswer}
+                            onChange={(e) => {
+                            setRiddleAnswer(e.target.value);
+                            setRiddleError('');
+                            }}
+                            disabled={mission1Stage > 0}
+                        />
+                        {mission1Stage === 0 && (
+                            <button 
+                                onClick={handleRiddleSubmit}
+                                className="px-6 bg-pink-400 text-white rounded-lg font-bold shadow-md hover:bg-pink-500 transition-colors"
+                            >
+                                Go
+                            </button>
+                        )}
+                    </div>
                   </div>
-                  
-                  <input 
-                    type="text" 
-                    placeholder="Type your answer..." 
-                    className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-300 outline-none text-center bg-white/90"
-                    value={riddleAnswer}
-                    onChange={(e) => {
-                      setRiddleAnswer(e.target.value);
-                      setRiddleError('');
-                    }}
-                  />
-                  
-                  {riddleError && <p className="text-red-500 font-bold text-sm animate-bounce">{riddleError}</p>}
 
-                  <button 
-                    onClick={handleRiddleSubmit}
-                    className="w-full py-3 bg-pink-400 text-white rounded-full font-bold shadow-md hover:bg-pink-500 transition-colors"
-                  >
-                    Unlock
-                  </button>
-                </div>
-              )}
-
-              {/* MISSION 2: EMOJIS */}
-              {gameState === GameState.MISSION_2 && (
-                <div className="text-center space-y-4">
-                  <h2 className="text-2xl font-bold text-purple-500">Mission 2: Describe Me</h2>
-                  <p className="text-sm text-gray-700 font-medium">Pick exactly 3 emojis that describe your favorite sibling.</p>
-                  
-                  {!emojiFeedback ? (
-                    <>
-                      <div className="grid grid-cols-4 gap-3 my-4">
-                        {EMOJIS.map((item) => (
-                          <button 
-                            key={item.id}
-                            onClick={() => handleEmojiToggle(item.emoji)}
-                            className={`text-3xl p-2 rounded-lg transition-all ${selectedEmojis.includes(item.emoji) ? 'bg-purple-200 scale-110 ring-2 ring-purple-400' : 'bg-gray-50/80 hover:bg-gray-100'}`}
-                          >
-                            {item.emoji}
-                          </button>
-                        ))}
-                      </div>
-
-                      <button 
-                        onClick={handleEmojiSubmit}
-                        disabled={selectedEmojis.length !== 3 || emojiLoading}
-                        className="w-full py-3 bg-purple-400 disabled:bg-gray-300 text-white rounded-full font-bold shadow-md hover:bg-purple-500 transition-colors"
-                      >
-                        {emojiLoading ? 'Analyzing...' : 'Analyze My Choices'}
-                      </button>
-                    </>
-                  ) : (
-                    <div className="bg-purple-50/90 p-6 rounded-xl animate-in fade-in zoom-in duration-500">
-                      <p className="text-xl mb-2">{selectedEmojis.join(' ')}</p>
-                      <p className="font-handwriting text-lg text-purple-800">"{emojiFeedback}"</p>
-                      <p className="text-xs text-gray-500 mt-4">(Moving to next level...)</p>
+                  {/* Riddle Part 2 (Appears after solving Part 1) */}
+                  {mission1Stage > 0 && (
+                    <div className="animate-in slide-in-from-bottom-4 fade-in duration-500 border-t-2 border-dashed border-gray-200 pt-6">
+                        <div className="bg-purple-50/90 p-6 rounded-xl border-2 border-purple-100 border-dashed mb-4">
+                            <p className="text-lg font-handwriting leading-relaxed">
+                                "What goes up but never comes down?"
+                            </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <input 
+                                type="text" 
+                                placeholder="Answer 2..." 
+                                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-300 outline-none text-center bg-white/90"
+                                value={riddle2Answer}
+                                onChange={(e) => {
+                                    setRiddle2Answer(e.target.value);
+                                    setRiddleError('');
+                                }}
+                            />
+                            <button 
+                                onClick={handleRiddle2Submit}
+                                className="px-6 bg-purple-500 text-white rounded-lg font-bold shadow-md hover:bg-purple-600 transition-colors"
+                            >
+                                Unlock
+                            </button>
+                        </div>
                     </div>
                   )}
+                  
+                  {riddleError && <p className="text-red-500 font-bold text-sm animate-bounce">{riddleError}</p>}
                 </div>
               )}
 
-              {/* MISSION 3: RIGGED QUIZ */}
+              {/* MISSION 2: MEMORY GAME */}
+              {gameState === GameState.MISSION_2 && (
+                <div className="text-center w-full">
+                  <MemoryGame onComplete={handleMemoryGameComplete} />
+                </div>
+              )}
+
+              {/* MISSION 3: WATER GAME */}
               {gameState === GameState.MISSION_3 && (
-                <div className="text-center space-y-8">
-                   <h2 className="text-2xl font-bold text-blue-500">Mission 3: The Truth</h2>
-                   <p className="text-xl font-medium">Who is the favorite child?</p>
+                <div className="text-center w-full">
+                  <WaterGame onComplete={handleWaterGameComplete} />
+                </div>
+              )}
+
+              {/* MISSION 4: EMOJI GAME */}
+              {gameState === GameState.MISSION_4 && (
+                <div className="text-center w-full">
+                  <EmojiGame onComplete={handleEmojiGameComplete} />
+                </div>
+              )}
+
+              {/* MISSION 5: RIGGED QUIZ (Single Question) */}
+              {gameState === GameState.MISSION_5 && (
+                <div className="text-center space-y-6 animate-in fade-in">
+                   <h2 className="text-2xl font-bold text-blue-500">Mission 5: The Truth</h2>
+                   <p className="text-xl font-medium mb-8">Who is the favorite child?</p>
                    
                    <div className="relative h-40 w-full flex items-center justify-center select-none">
                      <button 
@@ -437,6 +454,8 @@ export default function App() {
                 <div className="text-center space-y-6">
                   <h2 className="text-2xl font-bold text-gray-700">The Final Door</h2>
                   <div className="flex justify-center gap-2 mb-4">
+                     <LockIcon unlocked={true} />
+                     <LockIcon unlocked={true} />
                      <LockIcon unlocked={true} />
                      <LockIcon unlocked={true} />
                      <LockIcon unlocked={true} />
