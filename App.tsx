@@ -11,7 +11,7 @@ import PartyScene from './components/PartyScene';
 import MemoryGame from './components/MemoryGame';
 import WaterGame from './components/WaterGame';
 import EmojiGame from './components/EmojiGame';
-import { generateBirthdayWish } from './services/geminiService';
+import { generateRiddle, generateBirthdayWish } from './services/geminiService';
 
 // --- Icons ---
 const LockIcon = ({ unlocked }: { unlocked: boolean }) => (
@@ -44,8 +44,11 @@ const MusicIcon = ({ playing }: { playing: boolean }) => (
 // 1. Create a folder named 'audio' inside your 'public' folder.
 // 2. Put your MP3 file there and name it 'song.mp3'.
 // 3. This URL works because Vercel serves the 'public' folder at the root.
-const SONG_URL = "/audio/song.mp3"; 
-const BACKUP_SONG_URL = "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Happy_Birthday_to_You_Piano.ogg/Happy_Birthday_to_You_Piano.ogg.mp3";
+const SONG_URL = "/audio/audio1.mp3"; 
+
+// If you haven't uploaded a file yet, you can uncomment this Wikimedia link to test:
+// const SONG_URL = "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Happy_Birthday_to_You_Piano.ogg/Happy_Birthday_to_You_Piano.ogg.mp3";
+
 
 // --- 📝 EDIT YOUR CUSTOM QUESTIONS HERE 📝 ---
 
@@ -56,14 +59,14 @@ const CUSTOM_RIDDLE_1 = {
 };
 
 const CUSTOM_RIDDLE_2 = {
-  question: "What goes up but never comes down?", // <--- Question 2
-  hint: "It happens every year on your birthday!",
-  validAnswers: ['age', 'my age', 'years', 'growing up']
+  question: "Which indoor game we used to play a lot during our summer vacation ?", // <--- Question 2
+  hint: "I used to be a champion at it😎",
+  validAnswers: ['carrom', 'Carrom']
 };
 
 const CUSTOM_FINAL_DOOR = {
-  question: "What are you to me?", // <--- The Final Password Hint
-  password: "SISTER"               // <--- The Final Password (Case insensitive)
+  question: "What’s that silly pet name you always use for me? (the one I “hate” but still answer to😭🐶) (type your answer in lowercase)", // <--- The Final Password Hint
+  password: "muku"               // <--- The Final Password (Case insensitive)
 };
 
 // ------------------------------------------------
@@ -94,9 +97,11 @@ export default function App() {
   const [isCurtainOpening, setIsCurtainOpening] = useState(false);
 
   // Mission 1 State (Riddle)
-  const [mission1Stage, setMission1Stage] = useState(0); // 0: Question 1, 1: Question 2
+  const [mission1Stage, setMission1Stage] = useState(0); // 0: AI Riddle, 1: Static Riddle
+  const [riddle, setRiddle] = useState<{question: string, hint: string} | null>(null);
   const [riddleAnswer, setRiddleAnswer] = useState("");
   const [riddle2Answer, setRiddle2Answer] = useState("");
+  const [riddleLoading, setRiddleLoading] = useState(false);
   const [riddleError, setRiddleError] = useState("");
 
   // Mission 5 State (Quiz)
@@ -108,7 +113,20 @@ export default function App() {
   const [wish, setWish] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
-  // --- Handlers ---
+  // --- Effects ---
+
+  useEffect(() => {
+    // Preload riddle
+    if (gameState === GameState.INTRO) {
+      setRiddleLoading(true);
+      generateRiddle().then(data => {
+        setRiddle({ question: data.riddle, hint: data.hint });
+        setRiddleLoading(false);
+      });
+    }
+  }, [gameState]);
+
+ // --- Handlers ---
 
   const handleStartGame = () => {
     setGameState(GameState.MISSION_1);
@@ -211,7 +229,6 @@ export default function App() {
       <MusicIcon playing={isMusicPlaying} />
     </button>
   );
-
   // --- Renders ---
 
   const isPartyMode = [GameState.CURTAIN, GameState.PARTY, GameState.CAKE, GameState.GIFT, GameState.REVEAL].includes(gameState);
@@ -220,19 +237,13 @@ export default function App() {
     <div className="relative w-full h-[100dvh] font-sans text-gray-800 overflow-hidden">
       <BackgroundGallery />
       
-      {/* Permanent Audio Element with Fallback */}
+      {/* Permanent Audio Element */}
       <audio 
         ref={audioRef} 
+        src={SONG_URL} 
         loop 
-        onError={(e) => {
-          console.log("Local audio not found, switching to backup...");
-          if (e.currentTarget.src !== BACKUP_SONG_URL) {
-            e.currentTarget.src = BACKUP_SONG_URL;
-          }
-        }}
-      >
-        <source src={SONG_URL} type="audio/mpeg" />
-      </audio>
+        onError={(e) => console.log("Audio load failed (Make sure song.mp3 is in public/audio/ folder)")} 
+      />
       
       {/* Music Toggle - Visible during the party sequence */}
       {isPartyMode && <MusicButton />}
@@ -314,16 +325,16 @@ export default function App() {
           )}
 
           <div className="flex min-h-full flex-col items-center justify-center p-4 py-20">
-            {/* Logic: Mission 2 (Memory) needs a wider container. All other missions use standard width. */}
+            
             <div className={`bg-white/85 backdrop-blur-md shadow-2xl rounded-3xl w-full border border-white/60 animate-float transition-all duration-500 ${gameState === GameState.MISSION_2 ? 'max-w-4xl p-4 sm:p-8' : 'max-w-md p-8'}`}>
               
               {/* INTRO */}
               {gameState === GameState.INTRO && (
                 <div className="text-center space-y-6">
                   <h1 className="text-4xl font-handwriting text-purple-600 mb-2">Uh oh...</h1>
-                  <p className="text-lg">You've been digitally kidnapped!</p>
+                  <p className="text-lg">You've been digitally kidnapped by Mukta!</p>
                   <div className="bg-purple-100/90 p-4 rounded-xl text-purple-800 text-sm">
-                    <p>To unlock your birthday surprise, you must prove you are my true sister by passing 5 challenges.</p>
+                    <p>You’ve stumbled into a secret sibling quest! To unlock your birthday surprise, you must journey through magical challenges created just for you.</p>
                   </div>
                   <button 
                     onClick={handleStartGame}
@@ -337,7 +348,7 @@ export default function App() {
               {/* MISSION 1: RIDDLE */}
               {gameState === GameState.MISSION_1 && (
                 <div className="text-center space-y-6">
-                  <h2 className="text-2xl font-bold text-pink-500">Mission 1: The Riddles</h2>
+                  <h2 className="text-2xl font-bold text-pink-500">Mission 1: Crack the Clue</h2>
                   
                   {/* Riddle Part 1 */}
                   <div className={`transition-all duration-500 ${mission1Stage > 0 ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -426,7 +437,7 @@ export default function App() {
               {gameState === GameState.MISSION_5 && (
                 <div className="text-center space-y-6 animate-in fade-in">
                    <h2 className="text-2xl font-bold text-blue-500">Mission 5: The Truth</h2>
-                   <p className="text-xl font-medium mb-8">Who is the favorite child?</p>
+                   <p className="text-xl font-medium mb-8">Who is more caring, sensible and responsible? (I will tell the answer for this one : It’s you, duh 😌 Tap “Madhura,” today you’re the star, so you win!) </p>
                    
                    <div className="relative h-40 w-full flex items-center justify-center select-none">
                      <button 
@@ -451,7 +462,7 @@ export default function App() {
                    </div>
                    
                    {quizAttempt > 2 && (
-                     <p className="text-sm text-gray-600 font-bold italic">Stop trying to click "Me". It's physically impossible.</p>
+                     <p className="text-sm text-gray-600 font-bold italic">Gotcha!😆Stop trying to click "Madhura". It's physically impossible.🤭 I tricked you😂</p>
                    )}
                 </div>
               )}
