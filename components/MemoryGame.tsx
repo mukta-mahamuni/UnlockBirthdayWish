@@ -9,10 +9,10 @@ import React, { useState, useEffect } from 'react';
 // 4. Rename your files to match the list below:
 
 const MEMORY_PHOTOS = [
-  "/images/image1.jpg", 
-  "/images/image2.jpg",    
-  "/images/image3.jpg", 
-  "/images/image5.jpg", 
+  "/images/image1.jpeg", 
+  "/images/image2.jpeg",    
+  "/images/image3.jpeg", 
+  "/images/image5.jpeg", 
 ];
 
 // Fallback logic: If local photos aren't found, these won't load, 
