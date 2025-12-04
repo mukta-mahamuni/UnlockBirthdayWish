@@ -419,7 +419,7 @@ export default function App() {
               {gameState === GameState.MISSION_5 && (
                 <div className="text-center space-y-6 animate-in fade-in">
                    <h2 className="text-2xl font-bold text-blue-500">Mission 5: The Truth</h2>
-                   <p className="text-xl font-medium mb-8">Who is more caring, sensible and responsible? (I will tell answer for this one : It’s you, duh 😌 Tap “Madhura,” today you’re the star, so you win!) </p>
+                   <p className="text-xl font-medium mb-8">Who is more caring, sensible and responsible? (I will tell the answer for this one : It’s you, duh 😌 Tap “Madhura,” today you’re the star, so you win!) </p>
                    
                    <div className="relative h-40 w-full flex items-center justify-center select-none">
                      <button 
