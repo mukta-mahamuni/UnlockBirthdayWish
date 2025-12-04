@@ -460,7 +460,7 @@ export default function App() {
                      <LockIcon unlocked={true} />
                      <LockIcon unlocked={true} />
                   </div>
-                  <p>Password Hint: What are you to me?</p>
+                  <p>Password Hint: What’s that silly pet name you always use for me? (the one I “hate” but still answer to?😭🐶)</p>
                   
                   <input 
                     type="password" 
