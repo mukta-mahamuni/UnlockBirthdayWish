@@ -444,7 +444,7 @@ export default function App() {
                        onClick={handleQuizSuccess}
                        className="absolute left-4 sm:left-10 bg-green-400 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-green-500 z-10"
                      >
-                       You (User)
+                       Mukta
                      </button>
 
                      <button 
@@ -457,7 +457,7 @@ export default function App() {
                        }}
                        className="absolute right-4 sm:right-10 bg-red-300 text-white px-8 py-3 rounded-full font-bold shadow-lg z-20"
                      >
-                       Me (Sister)
+                       Madhura
                      </button>
                    </div>
                    
