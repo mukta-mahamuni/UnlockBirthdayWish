@@ -35,8 +35,8 @@ const EmojiGame: React.FC<EmojiGameProps> = ({ onComplete }) => {
 
   return (
     <div className="w-full max-w-md mx-auto p-4 text-center animate-in fade-in duration-700">
-      <h2 className="text-2xl font-bold text-purple-500 mb-2">Mission 4: Describe Me</h2>
-      <p className="text-gray-600 mb-6 font-medium">Pick exactly 3 emojis that describe your sibling.</p>
+      <h2 className="text-2xl font-bold text-purple-500 mb-2">Mission 4: The Emoji Spell</h2>
+      <p className="text-gray-600 mb-6 font-medium">Pick 3 emojis that you feel represent your sibling the most 💕 (for me - Mukta) </p>
 
       <div className="grid grid-cols-4 gap-3 mb-6 bg-white/50 p-4 rounded-2xl border border-white">
         {EMOJIS.map((emoji) => (
