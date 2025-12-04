@@ -8,15 +8,15 @@ import React from 'react';
 
 const MEMORIES = [
   {
-    src: "/images/gallery1.jpg",
+    src: "/images/gallery1.jpeg",
     caption: "Remember this?"
   },
   {
-    src: "/images/image3.jpg",
+    src: "/images/image3.jpeg",
     caption: "Besties Forever"
   },
   {
-    src: "/images/image4.jpg",
+    src: "/images/image4.jpeg",
     caption: "Chaos Duo"
   },
 ];
