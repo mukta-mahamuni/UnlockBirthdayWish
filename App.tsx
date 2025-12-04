@@ -44,7 +44,7 @@ const MusicIcon = ({ playing }: { playing: boolean }) => (
 // 1. Create a folder named 'audio' inside your 'public' folder.
 // 2. Put your MP3 file there and name it 'song.mp3'.
 // 3. This URL works because Vercel serves the 'public' folder at the root.
-const SONG_URL = "/audio/song.mp3"; 
+const SONG_URL = "/audio/audio1.mp3"; 
 
 // If you haven't uploaded a file yet, you can uncomment this Wikimedia link to test:
 // const SONG_URL = "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Happy_Birthday_to_You_Piano.ogg/Happy_Birthday_to_You_Piano.ogg.mp3";
