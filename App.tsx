@@ -310,9 +310,9 @@ export default function App() {
               {gameState === GameState.INTRO && (
                 <div className="text-center space-y-6">
                   <h1 className="text-4xl font-handwriting text-purple-600 mb-2">Uh oh...</h1>
-                  <p className="text-lg">You've been digitally kidnapped!</p>
+                  <p className="text-lg">You've been digitally kidnapped by Mukta!</p>
                   <div className="bg-purple-100/90 p-4 rounded-xl text-purple-800 text-sm">
-                    <p>To unlock your birthday surprise, you must prove you are my true sister by passing 5 challenges.</p>
+                    <p>You’ve stumbled into a secret sibling quest! To unlock your birthday surprise, you must journey through magical challenges created just for you.</p>
                   </div>
                   <button 
                     onClick={handleStartGame}
@@ -419,7 +419,7 @@ export default function App() {
               {gameState === GameState.MISSION_5 && (
                 <div className="text-center space-y-6 animate-in fade-in">
                    <h2 className="text-2xl font-bold text-blue-500">Mission 5: The Truth</h2>
-                   <p className="text-xl font-medium mb-8">Who is the favorite child?</p>
+                   <p className="text-xl font-medium mb-8">Who is more caring, sensible and responsible? (I will tell answer for this one : It’s you, duh 😌 Tap “Madhura,” today you’re the star, so you win!) </p>
                    
                    <div className="relative h-40 w-full flex items-center justify-center select-none">
                      <button 
@@ -444,7 +444,7 @@ export default function App() {
                    </div>
                    
                    {quizAttempt > 2 && (
-                     <p className="text-sm text-gray-600 font-bold italic">Stop trying to click "Me". It's physically impossible.</p>
+                     <p className="text-sm text-gray-600 font-bold italic">Gotcha!😆Stop trying to click "Madhura". It's physically impossible.🤭 I tricked you😂</p>
                    )}
                 </div>
               )}
