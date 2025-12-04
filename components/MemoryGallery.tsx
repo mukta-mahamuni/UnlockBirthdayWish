@@ -1,24 +1,24 @@
 
 import React from 'react';
 
-// --- INSTRUCTIONS FOR USER ---
-// Add your own photo URLs here!
-// You can use the format: { src: "URL", caption: "Caption" }
+// --- INSTRUCTIONS ---
+// 1. On GitHub, go to 'public/images/' folder.
+// 2. Upload your photos there.
+// 3. Rename them EXACTLY to: gallery1.jpg, gallery2.jpg, gallery3.jpg
+
 const MEMORIES = [
   {
-    src: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=500&q=80",
+    src: "/images/gallery1.jpg",
     caption: "Remember this?"
   },
   {
-    src: "https://images.unsplash.com/photo-1543269664-56d93c1b41a6?w=500&q=80",
+    src: "/images/image3.jpg",
     caption: "Besties Forever"
   },
   {
-    src: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500&q=80",
+    src: "/images/image4.jpg",
     caption: "Chaos Duo"
   },
-  // Add more photos here:
-  // { src: "/images/1.jpg", caption: "Local Photo" },
 ];
 
 const MemoryGallery: React.FC = () => {
